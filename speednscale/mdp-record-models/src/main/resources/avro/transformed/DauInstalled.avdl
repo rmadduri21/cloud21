@@ -1,0 +1,51 @@
+@namespace("io.maxplay.mdp.mdp_record_models.transformed")
+
+// Reusable, data model for building daily average users analytics.
+protocol MdpRecordProtocol {
+
+    /**
+     * A structure representing daily average users.
+     */
+    record DauInstalled {    
+		 
+		/**
+		 * client event time (UTC)
+		 */
+		string client_event_time;	 
+		 		 
+		/**
+		 * Name of OS platform
+		 */
+		string platform;
+		
+		/** 
+		 * Determined by external facing IP address. ISO 2 letter country codes
+		 */
+		string country_code;
+		
+		/**
+		 * Name of game
+		 */
+		string game;	
+		
+		/**
+		 * Sum of installs completed
+		 */
+		long sum_installed;
+		
+		/**
+		 * Number of advertisers
+		 */
+		long count_advertisers;
+		 
+		/**
+		 * Number of devices
+		 */
+		long count_devices;
+		 
+		 /**
+		  * Number of messages per day
+		  */
+		 long count_messages;
+    }
+}				 

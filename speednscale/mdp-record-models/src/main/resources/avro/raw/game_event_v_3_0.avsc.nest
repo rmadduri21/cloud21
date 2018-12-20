@@ -1,0 +1,27 @@
+{
+"namespace": "io.maxplay.mdp.mdp_record_models.raw",
+"type": "record",
+"name": "game_event_v_3_0",
+"fields":[
+    {"name": "client_game_record_type_counter", "type": ["long", "null"]},
+	{"name": "client_game_record_type_counter_reset_timestamp", "type": ["long", "null"]},
+	{"name": "client_game_record_type_counter_reset_timezone", "type": ["string", "null"]},
+    {"name": "advertiser_id", "type": "string"},
+    {"name": "app_bundle_id", "type": "string"},
+    {"name": "binary_version", "type": "string"},
+    {"name": "country_code", "type": "string"},
+    {"name": "device_id", "type": "string"},
+    {"name": "device_model", "type": "string"},
+    {"name": "device_name", "type": "string"},
+    {"name": "is_production_build", "type": "boolean"},
+    {"name": "is_release_build", "type": "boolean"},
+    {"name": "os_version", "type": "string"},
+    {"name": "platform", "type": "string"},
+    {"name": "title_id", "type": "long"},
+    {"name": "game_user_id", "type": "string"},
+    {"name": "game", "type": "string"},
+    {"name": "extended_data_fields","type":[{
+        "type" : "map",
+        "values" : "string"},"null"]}
+    ]
+}

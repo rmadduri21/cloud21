@@ -1,0 +1,78 @@
+{
+	"namespace":"io.maxplay.mdp.mdp_record_models.transformed",
+	"type":"record",
+	"name":"TelemetryEvent",
+	"fields":[
+    	{"name":"event_name","type":"string"},
+    	{"name":"event_guid","type":"string"},
+    	{"name": "event_type","type": {"name": "EventType","type": "enum","symbols": ["PLATFORM","TOOLS"]}},
+    	{"name":"client_event_timestamp","type":"long"},
+    	{"name":"client_event_timezone","type":"string"},
+    	{"name":"client_os","type":"string"},
+    	{"name":"client_id","type":"string"},
+    	{"name":"client_ip","type":"string"},
+    	{"name":"client_event_counter","type":"long"},
+    	{"name":"client_event_counter_reset_ms","type":"long"},
+    	{"name":"client_sdk_version","type":["string","null"]},
+    	{"name":"server_timestamp","type":"long"},
+    	{"name":"server_observed_address","type":"string"},
+    	{"name":"project_id","type":[ "long", "null" ]}, 
+	    {"name":"event_data","type": [	    
+	    	{
+			    "type": "record",
+			    "name": "ToolsEventData",
+			    "fields": [
+			        { "name": "tools_event_counter", "type": [ "long", "null" ] },
+			        { "name": "tools_event_counter_reset_ms", "type": [ "long", "null" ] },
+		            { "name": "tools_event_type","type": {"name": "ToolsEventType","type": "enum","symbols": ["SYSTEM","LIFECYCLE","ACTION", "_NO_DETAIL"]}},
+			        { "name": "tool_version", "type": "string" },
+			        { "name": "maxplay_user_id", "type": [ "long", "null" ] },
+			        { "name": "maxplay_session_id", "type": [ "long", "null" ] },
+			        { "name": "container", "type": "string" },
+			        { "name": "module", "type": "string" },
+			        { "name": "function", "type": "string" },
+			        { "name": "feature_id", "type": [ "string", "null" ] }, 
+			        { "name": "event_detail", "type": [ 
+			        	{
+						    "type": "record",
+						    "name": "ToolsActionEventDetail",
+						    "fields": [
+						        { "name": "action_command", "type": "string" },
+						        { "name": "action_command_args", "type": "string" },
+						        { "name": "action_method", "type": "string" }
+						    ]
+						}, "null"]
+					}
+				]
+			},					
+			{
+				"type":"record",
+				"name":"PlatformEventData",
+				"fields":[
+					{"name":"platform_event_counter","type":["long","null"]},
+					{"name":"platform_event_counter_reset_ms","type":["long","null"]},
+			        { "name": "maxplay_user_id", "type": [ "long", "null" ] },
+			        { "name": "maxplay_session_id", "type": [ "long", "null" ] },
+			        { "name": "platform_event_type","type": {"name": "PlatformEventType","type":"enum","symbols":["SYSTEM","REQUEST","RESPONSE", "_NO_DETAIL"]}},
+			        { "name": "correlation_id", "type": ["string","null"] },
+			        { "name": "container", "type": "string" },
+			        { "name": "module", "type": "string" },
+			        { "name": "function", "type": "string" },
+			        { "name": "feature_id", "type": "string" },
+			        {"name":"event_detail","type":[		        
+						{
+						    "type":"record",
+						    "name":"PlatformResponseEventDetail",
+						    "fields":[
+						        {"name":"response_size","type":"long"},
+						        {"name":"response_status","type":"long"},
+						        {"name":"processing_time","type":"long"}
+						    ]
+						}, "null"]
+					}
+				]
+			}]
+		},
+	    {"name":"extended_data_fields","type":[{"type":"map","values":"string"},"null"]}
+	]
+}

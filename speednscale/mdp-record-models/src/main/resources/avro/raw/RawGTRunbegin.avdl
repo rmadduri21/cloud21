@@ -1,0 +1,48 @@
+@namespace("io.maxplay.mdp.mdp_record_models.raw")
+
+// Reusable, data model for building daily average users analytics.
+protocol MdpRecordProtocol {
+
+    /**
+     * A structure representing daily average users.
+     */
+    record RawGTRunbegin {    
+		union {null,string} key = null;              	                    
+		union {null,string} begin_nodes = null;              	                    
+		union {null,string} begin_energy = null;
+				
+		/**
+		 * client event time (UTC)
+		 */
+		union {null,string} client_event_time = null;
+          	                    
+		long begin_count_star = 0;
+		long begin_count_users = 0;
+		union {null,string} first_play_time = null;
+
+		/**
+		 * Name of OS platform
+		 */
+		union {null,string} platform = null;
+
+		/** 
+		 * Determined by external facing IP address. ISO 2 letter country codes
+		 */
+		union {null,string} country_code = null;
+		          	                    
+		union {null,string} is_install = null;              	                    
+		union {null,string} device_id = null;     	                    
+		union {null,string} advertiser_id = null;        	                    
+
+		/**
+		 * Name of game
+		 */
+		union {null,string} game = null;	
+		
+		union {null,string} recordname = null;
+		union {null,string} binary_version = null;
+		union {null,string} ab_groups = null;
+		double  data__usd_cost = 0.0;
+		union {null,string} data__sku = null;
+    }
+}

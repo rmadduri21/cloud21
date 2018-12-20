@@ -1,0 +1,6 @@
+{
+	"namespace":"io.maxplay.mdp.mdp_record_models.raw",
+	"type":"enum",
+	"name":"CommonEventType",
+    "symbols": ["PLATFORM","TOOLS"]
+}

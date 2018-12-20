@@ -1,0 +1,495 @@
+##
+## Licensed to the Apache Software Foundation (ASF) under one
+## or more contributor license agreements.  See the NOTICE file
+## distributed with this work for additional information
+## regarding copyright ownership.  The ASF licenses this file
+## to you under the Apache License, Version 2.0 (the
+## "License"); you may not use this file except in compliance
+## with the License.  You may obtain a copy of the License at
+##
+##     http://www.apache.org/licenses/LICENSE-2.0
+##
+## Unless required by applicable law or agreed to in writing, software
+## distributed under the License is distributed on an "AS IS" BASIS,
+## WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## See the License for the specific language governing permissions and
+## limitations under the License.
+##
+#if ($schema.getNamespace())
+package $schema.getNamespace();  
+#end
+import com.google.common.base.Optional;
+import com.google.common.base.CharMatcher;
+import java.io.Serializable;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import org.apache.avro.SchemaParseException;
+import com.google.common.primitives.Bytes;
+import java.math.BigDecimal;
+@SuppressWarnings("all")
+#if ($schema.getDoc())
+/** $schema.getDoc() */
+#end
+#foreach ($annotation in $this.javaAnnotations($schema))
+@$annotation
+#end
+@org.apache.avro.specific.AvroGenerated
+public class ${this.mangle($schema.getName())}#if ($schema.isError()) extends org.apache.avro.specific.SpecificExceptionBase#else extends org.apache.avro.specific.SpecificRecordBase#end implements org.apache.avro.specific.SpecificRecord, Serializable {
+  public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
+  
+  /**
+   * This custom logic was added for assigning a value to SCHEMA$ to avoid a string literal length limitation.
+   * String literal length is limited to 65536 (2^16) bytes. This hack gets around this limitation
+   * until the string literal length limitation until Avro is upgraded to v 1.7.5
+   */
+#if ($schema.toString().length()<50000)
+  private static final byte[] schemaBytes = "${this.javaEscape($schema.toString())}".getBytes(Charset.forName("UTF-8"));
+#elseif ($schema.toString().length()<100000)
+  private static final byte[] s1 = "${this.javaEscape($schema.toString().substring(0,50000))}".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] s2 = "${this.javaEscape($schema.toString().substring(50000))}".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] schemaBytes = Bytes.concat(s1,s2);
+#else
+  private static final byte[] s1 = "${this.javaEscape($schema.toString().substring(0,50000))}".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] s2 = "${this.javaEscape($schema.toString().substring(50000,100000))}".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] s3 = "${this.javaEscape($schema.toString().substring(100000))}".getBytes(Charset.forName("UTF-8"));
+  private static final byte[] schemaBytes = Bytes.concat(s1,s2,s3);
+#end
+  public static final org.apache.avro.Schema SCHEMA$;
+  static{
+    try {
+      SCHEMA$ = new org.apache.avro.Schema.Parser().parse(new ByteArrayInputStream(schemaBytes));
+    } catch (IOException e) {
+      throw new SchemaParseException(e);
+    }
+  }
+  
+#foreach ($field in $schema.getFields())
+#if ($field.doc())
+  /** $field.doc() */
+#end
+#foreach ($annotation in $this.javaAnnotations($field))
+  @$annotation
+#end
+  #if (${this.deprecatedFields()})@Deprecated#end #if (${this.publicFields()})public#elseif (${this.privateFields()})private#end ${this.javaUnbox($field.schema())} ${this.mangle($field.name(), $schema.isError())};
+#end
+#if ($schema.isError())
+
+  public ${this.mangle($schema.getName())}() {
+    super();
+  }
+  
+  public ${this.mangle($schema.getName())}(Object value) {
+    super(value);
+  }
+
+  public ${this.mangle($schema.getName())}(Throwable cause) {
+    super(cause);
+  }
+
+  public ${this.mangle($schema.getName())}(Object value, Throwable cause) {
+    super(value, cause);
+  }
+  
+#else
+#if ($schema.getFields().size() > 0)  
+
+  /**
+   * Default constructor.
+   * This constructor should NOT be used. For all object construction the builder should be used. This constructor
+   * was made public to work around an issue in Crunch. Once the issue has been resolved this constructor will be
+   * changed to private.
+   *
+   * @see <a href="https://connect.ucern.com/message/1366043#1366043">Discussion</a>
+   * 
+   * @deprecated
+   */
+  @Deprecated public ${this.mangle($schema.getName())}() {}
+
+  /**
+   * All-args constructor.
+   */
+  private ${this.mangle($schema.getName())}(#foreach($field in $schema.getFields())${this.javaType($field.schema())} ${this.mangle($field.name())}#if($velocityCount < $schema.getFields().size()), #end#end) {
+#foreach ($field in $schema.getFields())
+    this.${this.mangle($field.name())} = ${this.mangle($field.name())};
+#end
+  }
+#end
+
+#end
+  public org.apache.avro.Schema getSchema() { return SCHEMA$; }
+  // Used by DatumWriter.  Applications should not call. 
+  public java.lang.Object get(int field$) {
+    switch (field$) {
+#set ($i = 0)
+#foreach ($field in $schema.getFields())
+    case $i: return ${this.mangle($field.name(), $schema.isError())};
+#set ($i = $i + 1)
+#end
+    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+  // Used by DatumReader.  Applications should not call. 
+  @SuppressWarnings(value="unchecked")
+  public void put(int field$, java.lang.Object value$) {
+    switch (field$) {
+#set ($i = 0)
+#foreach ($field in $schema.getFields())
+    case $i: ${this.mangle($field.name(), $schema.isError())} = (${this.javaType($field.schema())})value$; break;
+#set ($i = $i + 1)
+#end
+    default: throw new org.apache.avro.AvroRuntimeException("Bad index");
+    }
+  }
+
+##Calling the macro 'setCommonVars' in order to use the initialized variables ##
+#foreach ($field in $schema.getFields())#setCommonVars()
+#set($getMethodName = ${this.generateGetMethod($schema, $field)} )
+#if (${isBoolean})
+#set($getMethodName = "is$getMethodName.substring(3, $getMethodName.length())" )
+#end
+#set($decimalType = "")
+#if(${isUnion})
+    #set($getType = "Optional<${this.javaType($field.schema())}>")
+    #if($field.getJsonProp("validationType"))
+        #foreach($item in $field.getJsonProp("validationType"))
+            #if($item.getTextValue()=="DECIMAL")
+                #set($decimalType = "Optional<BigDecimal>")
+            #end
+        #end
+    #end
+#else
+    #set($getType = "${this.javaType($field.schema())}")
+    #if($field.getJsonProp("validationType"))
+        #foreach($item in $field.getJsonProp("validationType"))
+            #if($item.getTextValue()=="DECIMAL")
+                #set($decimalType = "BigDecimal");    
+            #end
+        #end
+    #end
+#end
+  /** Gets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+#if ($field.doc())    $field.doc()
+#end
+    */
+#if(${isUnion})
+    public $getType $getMethodName() {
+        return Optional.fromNullable(${this.mangle($field.name(), $schema.isError())});
+    }
+    
+    #if($decimalType=="Optional<BigDecimal>")
+        #set($getMethodName = $getMethodName + "AsDecimal")
+        /** Gets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+        #if ($field.doc())    $field.doc()
+        #end
+        */
+        public $decimalType $getMethodName() {
+            if(${this.mangle($field.name(), $schema.isError())} == null) {
+                return Optional.absent();
+            }
+        
+            return Optional.of(new BigDecimal(${this.mangle($field.name(), $schema.isError())}));
+        }
+    #end   
+#else
+    public $getType $getMethodName() {
+        return ${this.mangle($field.name(), $schema.isError())};
+    }
+    
+    #if($decimalType=="BigDecimal")
+        #set($getMethodName = $getMethodName + "AsDecimal")
+        /** Gets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+        #if ($field.doc())    $field.doc()
+        #end
+        */
+        public $decimalType $getMethodName() {
+            return new BigDecimal(${this.mangle($field.name(), $schema.isError())});
+        }
+    #end   
+#end
+
+#if ($this.createSetters)
+  /**
+   * Sets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+   #if ($field.doc())    $field.doc()#end
+   * @param value the value to set.
+   */
+  public void ${this.generateSetMethod($schema, $field)}(${this.javaType($field.schema())} value) {
+    this.${this.mangle($field.name(), $schema.isError())} = value;
+  }
+#end
+
+#end
+  /** Creates a new ${this.mangle($schema.getName())} RecordBuilder */
+  public static #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder newBuilder() {
+    return new #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder();
+  }
+  
+  /** Creates a new ${this.mangle($schema.getName())} RecordBuilder by copying an existing Builder */
+  public static #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder newBuilder(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder other) {
+    return new #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder(other);
+  }
+  
+  /** Creates a new ${this.mangle($schema.getName())} RecordBuilder by copying an existing $this.mangle($schema.getName()) instance */
+  public static #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder newBuilder(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())} other) {
+    return new #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder(other);
+  }
+  
+  /**
+   * RecordBuilder for ${this.mangle($schema.getName())} instances.
+   */
+  public static class Builder extends#if ($schema.isError()) org.apache.avro.specific.SpecificErrorBuilderBase<${this.mangle($schema.getName())}>#else org.apache.avro.specific.SpecificRecordBuilderBase<${this.mangle($schema.getName())}>#end
+
+    implements#if ($schema.isError()) org.apache.avro.data.ErrorBuilder<${this.mangle($schema.getName())}>#else org.apache.avro.data.RecordBuilder<${this.mangle($schema.getName())}>#end {
+
+#foreach ($field in $schema.getFields())
+    private ${this.javaUnbox($field.schema())} ${this.mangle($field.name(), $schema.isError())};
+#end
+
+    /** Creates a new Builder */
+    private Builder() {
+      super(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.SCHEMA$);
+    }
+    
+    /** Creates a Builder by copying an existing Builder */
+    private Builder(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder other) {
+      super(other);
+    }
+    
+    /** Creates a Builder by copying an existing $this.mangle($schema.getName()) instance */
+    private Builder(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())} other) {
+      #if ($schema.isError())super(other)#else
+      super(#if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.SCHEMA$)#end;
+#foreach ($field in $schema.getFields())
+      if (isValidValue(fields()[$field.pos()], other.${this.mangle($field.name(), $schema.isError())})) {
+        this.${this.mangle($field.name(), $schema.isError())} = data().deepCopy(fields()[$field.pos()].schema(), other.${this.mangle($field.name(), $schema.isError())});
+        fieldSetFlags()[$field.pos()] = true;
+      }
+#end
+    }
+#if ($schema.isError())
+
+    @Override
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder setValue(Object value) {
+      super.setValue(value);
+      return this;
+    }
+    
+    @Override
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder clearValue() {
+      super.clearValue();
+      return this;
+    }
+
+    @Override
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder setCause(Throwable cause) {
+      super.setCause(cause);
+      return this;
+    }
+    
+    @Override
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder clearCause() {
+      super.clearCause();
+      return this;
+    }
+#end
+
+##Calling the macro 'setCommonVars' in order to use the initialized variables ##
+#foreach ($field in $schema.getFields())#setCommonVars()
+#set($getMethodName = ${this.generateGetMethod($schema, $field)} )
+#if (${isBoolean})
+#set($getMethodName = "is$getMethodName.substring(3, $getMethodName.length())" )
+#end
+    /** 
+     * Gets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+#if ($field.doc())     $field.doc()#end
+    */
+    public ${this.javaType($field.schema())} $getMethodName() {
+      return ${this.mangle($field.name(), $schema.isError())};
+    }
+#if ((${isArray}))
+#set($arrayMethodName = "${field.name().substring(0, 1).toUpperCase()}${field.name().substring(1, $field.name().length())}" )
+
+    /** 
+     * Adds a '${this.mangle($field.name(), $schema.isError())}' field to the collection.  
+#if ($field.doc())     $field.doc()#end*/
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder add$arrayMethodName($arrayElementType value) {
+      validate(fields()[$field.pos()], value);
+      if(${this.mangle($field.name(), $schema.isError())} == null) {
+        ${this.mangle($field.name(), $schema.isError())} = new java.util.ArrayList <$arrayElementType>(1);
+      }
+      ${this.mangle($field.name(), $schema.isError())}.add(value);
+      fieldSetFlags()[$field.pos()] = true;
+      return this;
+    }
+    
+    /** 
+     * addAll '${this.mangle($field.name(), $schema.isError())}' values to the collection.
+#if ($field.doc())     $field.doc()#end*/
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder addAll$arrayMethodName(${this.javaUnbox($field.schema())} value) {
+      validate(fields()[$field.pos()], value);
+#if ($field.defaultValue())
+    if(${this.mangle($field.name(), $schema.isError())} == null) {
+        ${this.mangle($field.name(), $schema.isError())} = new java.util.ArrayList <$arrayElementType>(value.size());
+      }
+      ${this.mangle($field.name(), $schema.isError())}.addAll(value);
+      fieldSetFlags()[$field.pos()] = true;
+      
+#else
+    if(value.size() > 0) {
+        if(${this.mangle($field.name(), $schema.isError())} == null) {
+            ${this.mangle($field.name(), $schema.isError())} = new java.util.ArrayList <$arrayElementType>(value.size());
+        }
+        ${this.mangle($field.name(), $schema.isError())}.addAll(value);
+        fieldSetFlags()[$field.pos()] = true;
+      }
+#end
+      return this;
+    }
+    #elseif (${isMap})
+#set($mapMethodName = "${field.name().substring(0, 1).toUpperCase()}${field.name().substring(1, $field.name().length())}" )
+
+    /** 
+     * Puts a '${this.mangle($field.name(), $schema.isError())}' value to the map.
+#if ($field.doc())     $field.doc()#end*/
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder put$mapMethodName(java.lang.String key, $mapValueType value) {
+      validate(fields()[$field.pos()], value);
+      if(${this.mangle($field.name(), $schema.isError())} == null) {
+        ${this.mangle($field.name(), $schema.isError())} = new java.util.HashMap <java.lang.String, $mapValueType>();
+      }
+      ${this.mangle($field.name(), $schema.isError())}.put(key, value);
+      fieldSetFlags()[$field.pos()] = true;
+      return this;
+    }
+    
+    /** 
+     * putAll '${this.mangle($field.name(), $schema.isError())}' values to the map.
+#if ($field.doc())     $field.doc()#end*/
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder putAll$mapMethodName(${this.javaUnbox($field.schema())} value) {
+      validate(fields()[$field.pos()], value);
+      if(${this.mangle($field.name(), $schema.isError())} == null) {
+        ${this.mangle($field.name(), $schema.isError())} = new java.util.HashMap <java.lang.String, $mapValueType>(value.size());
+      }
+      ${this.mangle($field.name(), $schema.isError())}.putAll(value);
+      fieldSetFlags()[$field.pos()] = true;
+      return this;
+    }
+    #else
+
+
+## If the data type of the field is string, we need to trim control characters and add a setWithTrim variant
+    #if(${isString})
+
+    /**
+     * Sets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+#if ($field.doc())     $field.doc()#end
+     */
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder ${this.generateSetMethod($schema, $field)}(${this.javaUnbox($field.schema())} value) {
+      validate(fields()[$field.pos()], value);
+      if(value != null) {
+        value = CharMatcher.JAVA_ISO_CONTROL.removeFrom(value);
+      }
+      this.${this.mangle($field.name(), $schema.isError())} = value;
+      fieldSetFlags()[$field.pos()] = true;
+      return this; 
+    }
+
+    /**
+     * Sets the value of the '${this.mangle($field.name(), $schema.isError())}' field, with trailing whitespace omitted.
+ #if ($field.doc())    $field.doc()#end
+     */
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder ${this.generateSetMethod($schema, $field)}WithTrim(${this.javaUnbox($field.schema())} value) {
+      validate(fields()[$field.pos()], value);
+      if(value != null) {
+        value = CharMatcher.WHITESPACE.trimTrailingFrom(CharMatcher.JAVA_ISO_CONTROL.removeFrom(value));
+      }
+      this.${this.mangle($field.name(), $schema.isError())} = value;
+      fieldSetFlags()[$field.pos()] = true;
+      return this; 
+    }
+
+## Else it's not a string so just use the set methods included in the default template shipped with Avro.
+    #else
+
+    /**
+     * Sets the value of the '${this.mangle($field.name(), $schema.isError())}' field.
+#if ($field.doc())     $field.doc()#end
+     */
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder ${this.generateSetMethod($schema, $field)}(${this.javaUnbox($field.schema())} value) {
+      validate(fields()[$field.pos()], value);
+      this.${this.mangle($field.name(), $schema.isError())} = value;
+      fieldSetFlags()[$field.pos()] = true;
+      return this; 
+    }
+    #end
+    #end
+
+    /** Checks whether the '${this.mangle($field.name(), $schema.isError())}' field has been set */
+    public boolean ${this.generateHasMethod($schema, $field)}() {
+      return fieldSetFlags()[$field.pos()];
+    }
+    
+    /** Clears the value of the '${this.mangle($field.name(), $schema.isError())}' field */
+    public #if ($schema.getNamespace())$schema.getNamespace().#end${this.mangle($schema.getName())}.Builder ${this.generateClearMethod($schema, $field)}() {
+#if (${this.isUnboxedJavaTypeNullable($field.schema())})
+      ${this.mangle($field.name(), $schema.isError())} = null;
+#end
+      fieldSetFlags()[$field.pos()] = false;
+      return this;
+    }
+
+#end
+    @Override
+    public ${this.mangle($schema.getName())} build() {
+      try {
+        ${this.mangle($schema.getName())} record = new ${this.mangle($schema.getName())}(#if ($schema.isError())getValue(), getCause()#end);
+##Calling the macro 'setCommonVars' in order to use the initialized variables ##
+#foreach ($field in $schema.getFields())#setCommonVars()
+        record.${this.mangle($field.name(), $schema.isError())} = fieldSetFlags()[$field.pos()] ?#if (${isUnionCollection}) (this.${this.mangle($field.name(), $schema.isError())} != null ?#end#if(${isCollection}) io.google.common.collect.Immutable#if(${isMap})Map#{else}List#end.copyOf(this.${this.mangle($field.name(), $schema.isError())})#end#if(${isUnionCollection}) : null)#end#if(!${isCollection}) this.${this.mangle($field.name(), $schema.isError())}#end : #if(${isCollection})((${this.javaType($field.schema())}) defaultValue(fields()[$field.pos()]) != null ? io.google.common.collect.Immutable#if(${isMap})Map#{else}List#end.copyOf((${this.javaType($field.schema())}) defaultValue(fields()[$field.pos()])) : null);
+#else(${this.javaType($field.schema())}) defaultValue(fields()[$field.pos()]);
+#end
+#end
+        return record;
+      } catch (Exception e) {
+        throw new org.apache.avro.AvroRuntimeException(e);
+      }
+    }
+  }
+}
+##Creating a macro to initialize all the variables ## 
+#macro( setCommonVars )
+#if($field.schema().getType()=="ARRAY")#set($isBaseArray = true)#else #set($isBaseArray = false)#end
+#if($field.schema().getType()=="MAP")#set($isBaseMap = true)#else #set($isBaseMap = false)#end
+#if($field.schema().getType()=="STRING")#set($isBaseString = true)#else #set($isBaseString = false)#end
+#if($field.schema().getType()=="LONG")#set($isBaseLong = true)#else #set($isBaseLong = false)#end
+#if($field.schema().getType()=="FLOAT")#set($isBaseFloat = true)#else #set($isBaseFloat = false)#end
+#if($field.schema().getType()=="INT")#set($isBaseInt = true)#else #set($isBaseInt = false)#end
+#if($field.schema().getType()=="DOUBLE")#set($isBaseDouble = true)#else #set($isBaseDouble = false)#end
+#if($field.schema().getType()=="BOOLEAN")#set($isBaseBoolean = true)#else #set($isBaseBoolean = false)#end
+##Customizing to handle union(*, null) and union(null,*)##
+#if($field.schema().getType()=="UNION" && $field.schema().getTypes().size() == 2 && 
+   ($field.schema().getTypes().get(0).getType() == "NULL" || $field.schema().getTypes().get(1).getType() == "NULL"))#set($isUnion = true)#else #set($isUnion = false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "ARRAY" || $field.schema().getTypes().get(1).getType() == "ARRAY"))#set($isUnionArray = true)#else#set($isUnionArray=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "MAP" || $field.schema().getTypes().get(1).getType() == "MAP"))#set($isUnionMap = true)#else#set($isUnionMap=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "STRING" || $field.schema().getTypes().get(1).getType() == "STRING"))#set($isUnionString = true)#else#set($isUnionString=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "LONG" || $field.schema().getTypes().get(1).getType() == "LONG"))#set($isUnionLong = true)#else#set($isUnionLong=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "BOOLEAN" || $field.schema().getTypes().get(1).getType() == "BOOLEAN"))#set($isUnionBoolean = true)#else#set($isUnionBoolean=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "FLOAT" || $field.schema().getTypes().get(1).getType() == "FLOAT"))#set($isUnionFloat = true)#else#set($isUnionFloat=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "INT" || $field.schema().getTypes().get(1).getType() == "INT"))#set($isUnionInt = true)#else#set($isUnionInt=false)#end
+#if($isUnion && ($field.schema().getTypes().get(0).getType() == "DOUBLE" || $field.schema().getTypes().get(1).getType() == "DOUBLE"))#set($isUnionDouble = true)#else#set($isUnionDouble=false)#end
+#set($isArray = $isBaseArray || $isUnionArray)
+#set($isMap = $isBaseMap || $isUnionMap)
+#set($isString = $isBaseString || $isUnionString)
+#set($isLong = $isBaseLong || $isUnionLong)
+#set($isFloat = $isBaseFloat || $isUnionFloat)
+#set($isInt = $isBaseInt || $isUnionInt)
+#set($isDouble = $isBaseDouble || $isUnionDouble)
+#set($isBoolean = $isBaseBoolean || $isUnionBoolean)
+#set($isPrimitive = $isBaseLong || $isBaseFloat || $isBaseInt || $isBaseDouble || $isBaseBoolean)
+#if($isUnionArray)#if($field.schema().getTypes().get(0).getType() == "ARRAY")#set($arrayElementType = ${this.javaType($field.schema().getTypes().get(0).getElementType())})#else #set($arrayElementType = ${this.javaType($field.schema().getTypes().get(1).getElementType())})#end#elseif($isBaseArray) #set($arrayElementType = ${this.javaType($field.schema().getElementType())})#end
+#if($isUnionMap)#if($field.schema().getTypes().get(0).getType() == "MAP")#set($mapValueType = ${this.javaType($field.schema().getTypes().get(0).getValueType())})#else #set($mapValueType = ${this.javaType($field.schema().getTypes().get(1).getValueType())})#end#elseif($isBaseMap) #set($mapValueType = ${this.javaType($field.schema().getValueType())})#end
+#set($methodName = ${this.generateSetMethod($schema, $field)})
+#set($methodName = $methodName.substring(3, $methodName.length()))
+#set($isUnionCollection = $isUnionArray || $isUnionMap)
+#set($isCollection = $isArray || $isMap)
+#end

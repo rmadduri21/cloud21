@@ -1,0 +1,17 @@
+{
+    "namespace":"io.maxplay.mdp.mdp_record_models.raw",
+    "type":"record",
+    "name":"platform_event_v_1_0",
+    "fields":[
+        {"name":"platform_record_type_counter","type":["long","null"]},
+        {"name":"platform_record_type_counter_reset_timestamp","type":["long","null"]},
+        {"name":"platform_record_type_counter_reset_timezone","type":["string","null"]},
+        {"name":"container","type":"string"},
+        {"name":"module","type":"string"},
+        {"name":"function","type":"string"},
+        {"name":"maxplay_user_id","type":["string","null"]},
+        {"name":"extended_data_fields","type":[{
+            "type":"map",
+            "values":"string"},"null"]}
+    ]
+}

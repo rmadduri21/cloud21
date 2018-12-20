@@ -1,0 +1,75 @@
+package io.speednscale.snsdp.data_ingestion
+
+
+import org.apache.spark._
+import org.apache.spark.rdd.RDD
+
+import org.junit.runner.RunWith
+import org.mockito.Mockito.when
+import org.scalatest.BeforeAndAfter
+import org.scalatest.FunSuite
+import org.scalatest.junit.JUnitRunner
+import org.scalatest._
+import org.scalatest.Matchers._
+import org.scalatest.mock.MockitoSugar
+
+import io.google.common.base.Optional
+import scala.language.reflectiveCalls
+
+@RunWith(classOf[JUnitRunner])
+class HdfsIngestTest extends FunSuite with MockitoSugar with Matchers with BeforeAndAfter {
+
+	val SOURCE_KEY = "sourceKey"
+
+			// common setup logic can be handled here; trait BeforeAndAfter
+			// needs to be mixed-in to use. this is synonymous to @Before
+			// in the java world
+	before {
+
+	}
+
+	// common teardown/cleanup logic can be handled here; trait BeforeAndAfter
+	// needs to be mixed-in to use. this is synonymous to @After
+	// in the java world
+	after {
+	}
+
+	/** Common setup logic can be defined here. this approach is desired
+	 * above using before/after if the setup logic doesn't do anything statically,
+	 * or defines a state that shoud be shared amongst tests (such as starting up a mini-cluster).
+	 * Each test will use its own fixture. This will easily allow the tests to be ran
+	 * in parallel.
+	 *
+	 * Once the fixture is defined, it can be instantiated and used in the test
+	 * methods just like any other object.
+	 *
+	 * {{{
+	* def fixture = new {
+	* val sample = 4
+	* }
+	*
+	* test("an example") {
+	* val fix = fixture
+	* math.sqrt(fix.sample) should equal(2)
+	* }
+	* }}}
+	*/
+
+	def fixture(textFilePath: String) = new {
+		val sparkConf = new SparkConf().setAppName("HdfsIngestionTest")
+				.setMaster("spark://node01:7077")
+		val sc = new SparkContext(sparkConf)
+		val rddFromFile = sc.textFile(textFilePath)
+	}
+
+	test("should return true") {
+
+		val fix = fixture("hdfs://node01:8020/user/rao/tpch/data/customer.data")
+		val recordCount = fix.rddFromFile.count()
+		recordCount should equal(150000)
+		fix.sparkConf should not equal (null)
+		fix.sc should not equal (null)
+		fix.rddFromFile should not equal (null)
+		fix.sc.stop()
+	}
+}

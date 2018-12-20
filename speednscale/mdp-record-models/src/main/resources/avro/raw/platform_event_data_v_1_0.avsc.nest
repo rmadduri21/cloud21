@@ -1,0 +1,12 @@
+{
+	"namespace":"io.maxplay.mdp.mdp_record_models.raw",
+	"type":"record",
+	"name":"platform_event_data_v_1_0",
+	"fields":[
+		{"name":"platform_event_counter","type":["long","null"]},
+		{"name":"platform_event_counter_reset_timestamp","type":["long","null"]},
+		{"name":"platform_event_counter_reset_timezone","type":["string","null"]},
+		{"name":"detail","type":[
+			"io.maxplay.mdp.mdp_record_models.raw.platform_event_v_1_0"]}
+	]
+}

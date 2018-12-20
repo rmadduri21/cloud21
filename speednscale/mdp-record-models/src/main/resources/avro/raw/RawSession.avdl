@@ -1,0 +1,238 @@
+@namespace("io.maxplay.mdp.mdp_record_models.raw")
+
+// Reusable, data model for building raw session object model to be used to represent a Raw Session.
+protocol MdpRecordProtocol {
+    
+    /**
+     * A structure representing a Raw Session.
+     */
+    record RawSession {    
+		/**
+		 * All messages
+		 * Event name (Required)
+		 */
+		string s_event_name;
+		 
+		/**
+		 * All messages	
+		 * client event time (UTC)
+		 */
+		string s_client_event_time;	
+		 		 
+		/**
+		 * All messages
+		 * Time zone of client
+		 */
+		string s_client_time_zone_offset;
+		 		 
+		/**
+		 * All messages
+		 * device unique identifier provided for vendor (required)
+		 */
+		string s_device_id;		 
+		 		 
+		/**
+		 * All messages
+		 * Name of OS platform
+		 */
+		string s_platform;
+		 
+		/**
+		 * All messages
+		 * Full name of OS
+		 */
+		string s_os_version_full;
+		
+		/**
+		 * All messages
+		 * External facing IP for device
+		 */
+	   string s_ip_address;
+		 
+		/**
+		 * All messages
+		 * Determined by external facing IP address. ISO 2 letter country codes
+		 */
+		string s_country_code;
+				 
+		/**
+		 * All messages
+		 * Device model and name of the client
+		 */
+		string s_device_name;
+				 
+		/**
+		 * All messages
+		 * “iPhone6,1” etc. The vendor-specific model variants (major and minor).
+		 */
+		string s_device_model;
+				 
+		/**
+		 * All messages
+		 * Version of binary that is installed on the device
+		 */
+		string s_game_binary_version;
+				 
+		/**
+		 * All messages
+		 * IDFA for iOS, AdvertiserId for Google
+		 */
+		string s_advertiser_id;
+				 
+		/**
+		 * All messages
+		 * Version of SDK generating and sending the telemetry
+		 */
+		string s_maxplay_sdk_version;
+				 
+		/**
+		 * All messages
+		 * Version of game-specific telemetry "schema" being sent.
+		 */
+		string s_game_telemetry_version;
+				 
+		/**
+		 * All messages
+		 * Globally unique identifier for each event sent. Used to de-dupe.
+		 */
+		string s_guid;
+				 
+		/**
+		 * All messages
+		 * Any unique player identifier tied to identity outside game
+		 */
+		string s_player_identifier;
+				 
+		/**
+		 * All messages
+		 * Time current session began
+		 */
+		string s_session_begin_time;
+				 
+		/**
+		 * All messages
+		 * Time of first-ever play session
+		 */
+		string s_first_play_session;
+						 
+		/**
+		 * All messages
+		 * Time of most recent play session before this one
+		 */
+		string s_previous_play_session;
+						 
+		/**
+		 * All messages
+		 * Number of consecutive 24-hour periods in which player played
+		 */
+		string s_consecutive_days_played;
+		
+		/**
+		 * All messages
+		 * Total in-app-purchase spend (in USD) to date
+		 */
+		string s_cumulative_in_app_purchase_spend_usd;
+					 
+		/**
+		 * All messages
+		 * Time of most recent in-app purchase
+		 */
+		string s_last_in_app_purchase;
+		
+		/**
+		 * All messages
+		 * Total balance of in-game soft currency
+		 */
+		string s_soft_currency_balance;
+						 
+		/**
+		 * All messages
+		 * Total balance of in-game hard currency
+		 */
+		string s_hard_currency_balance;
+								 
+		/**
+		 * All messages
+		 * In-game achievement level or other game-specific indicator of in-game progress (number of map nodes unlocked, etc.)
+		 */
+		string s_player_level;
+								 
+		/**
+		 * All messages
+		 * Count of player's in-app friends
+		 */
+		string s_player_friend_count;
+								 
+		/**
+		 * All messages
+		 * Any segmentation tag associating user with an A/B test bucket
+		 */
+		string s_a_b_test_segment;
+										 
+		/**
+		 * session_end
+		 * How session ended
+		 */
+		string s_session_end_type;
+		 
+		/** 
+		 * stage_begin, stage_end
+		 * stage_name - Name of level or stage or map node
+		 */
+		string s_stage_name;
+
+		/** 
+		 * stage_begin, stage_end
+		 * stage_level Game-specific indicator of stage difficulty or progression level
+		 */
+		int s_stage_level;
+
+		/** 
+		 * stage_begin
+		 * stage_begin_type - How or why user began game stage.
+		 */
+		string s_stage_begin_type;
+
+		/** 
+		 * stage_end
+		 * stage_end_type - How or why game stage ended.
+		 */
+		string s_stage_end_type;
+		
+		/** 
+		 * currency_earned, currency_spent
+		 * currency_name - Name of in-game currency
+		 */
+		string s_currency_name;
+		
+		/** 
+		 * currency_earned, currency_spent
+		 * currency_type - Hard or soft currency
+		 */
+		string s_currency_type;
+		
+		/** 
+		 * currency_earned, currency_spent
+		 * quantity_earned - Quantity of in-game currency earned
+		 */
+		int s_quantity_earned;
+		
+		/** 
+		 * currency_earned, currency_spent
+		 * how_earned - How currency was earned. (Question: handle item sales/returns separately?)
+		 */
+		string s_how_earned;
+		
+		/** 
+		 * currency_spent
+		 * item_or_powerup_purchased - What item or power-up was purchased, "crafting speedup", "electrum sword", etc.
+		 */
+		string s_item_or_powerup_purchased;
+				
+		/**
+		 * New columns not in the RawSession record. This is usually a Json string of key-value pairs with 
+		 * possible nesting of key-value pairs in place of a value.
+		 */
+		 union {null, string} s_new_columns = null;
+    }
+}				 

@@ -1,0 +1,13 @@
+{
+"namespace": "io.maxplay.mdp.mdp_record_models.raw",
+"type": "record",
+"name": "game_event_data_v_3_0",
+"fields": [
+	{"name": "client_game_event_counter", "type": ["long", "null"]},
+	{"name": "client_game_event_counter_reset_timestamp", "type": ["long", "null"]},
+	{"name": "client_game_event_counter_reset_timezone", "type": ["string", "null"]},
+	{"name": "detail", "type": [
+		"io.maxplay.mdp.mdp_record_models.raw.game_event_v_3_0"
+		]}
+   ]
+}

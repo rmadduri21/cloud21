@@ -1,0 +1,50 @@
+{
+ "namespace": "io.maxplay.mdp.mdp_record_models.raw",
+ "type": "record",
+ "name": "fyber_report",
+     "fields": [
+     {"name": "action", "type": "string", "default": ""},
+     {"name": "filename", "type": "string", "default": ""},
+     {"name": "date", "type": "string", "default": ""},
+     {"name": "activity_date", "type": "string", "default": ""},
+     {"name": "apple_idfa", "type": "string", "default": ""},
+     {"name": "user_id", "type": "string", "default": ""},
+     {"name": "unique_id", "type": "string", "default": ""},
+     {"name": "country_code", "type": "string", "default": ""},
+     {"name": "ad_network", "type": "string", "default": ""},
+     {"name": "users_completing_offers", "type": "string", "default": ""},
+     {"name": "completions", "type": "string", "default": ""},
+     {"name": "total_completions", "type": "string", "default": ""},
+     {"name": "payout_usd", "type": "string", "default": ""},
+        {
+            "name": "_mp_server_metadata",
+            "type": {
+                "type" : "record",
+                "name" : "_mp_server_metadata",
+                "fields" : [
+                    {"name": "_mp_header_content_type", "type": "string"},
+                    {"name": "_mp_server_timestamp", "type": "string"},
+                    {"name": "_mp_header_accept_encoding", "type": "string"},
+                    {"name": "_mp_header_connection", "type": "string"},
+                    {"name": "_mp_remote_address", "type": "string"},
+                    {"name": "_mp_query_string", "type": "string"},
+                    {"name": "_mp_header_host", "type": "string"},
+                    {"name": "_mp_request_uri", "type": "string"},
+                    {"name": "_mp_header_content_length", "type": "long", "default": 0},
+                    {"name": "_mp_header_user_agent", "type": "string", "default": ""},
+                    {"name": "_mp_header_x_unity_version", "type": "string", "default": ""},
+                    {"name": "server_timestamp", "type": "string", "default": ""}
+                ]
+            }
+        },
+        {"name": "recordname", "type": "string", "default": ""},
+        {"name": "game", "type": "string", "default": ""},
+        {
+            "name": "extended_data_fields",
+            "type": {
+                "type" : "map",
+                "values" : "string"
+            }
+        }
+    ]
+}
